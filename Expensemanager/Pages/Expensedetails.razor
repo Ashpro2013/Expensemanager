@@ -1,0 +1,118 @@
+﻿@page "/expensemanager"
+
+@using Expensemanager.Data
+<h3>Expense and Income</h3>
+
+  <div class="row">
+      <EditForm Model="@expense"> 
+        <div class="form-group">
+        <label for="name">Name</label>
+        <input  HtmlTag="input" type="text" id="Name" class="form-control" @bind-value="@expense.Name"  />
+    </div>
+    <div class="form-group">
+    <label for="name">Under</label>
+    <InputSelect class="form-control" id="under" @bind-Value="expense.Mode">
+        @if (expense.Mode != null)
+        {
+            <option value="@expense.Mode">@expense.Mode.ToString()</option>
+        }
+        else
+        {
+            <option value="">-- Select Group --</option>
+        }
+        @foreach (var group in Enum.GetValues(typeof(EnumMode)))
+        {
+            <option value="@group.ToString()">@group.ToString()</option>
+        }
+    </InputSelect>
+    </div>
+     <div class="form-group">
+        <label for="name">Date</label>
+        <input  HtmlTag="input" type="date" id="Date" class="form-control" @bind-value="@expense.Date"  />
+    </div>
+        <div class="form-group">
+        <label for="Debit">Debit Amount</label>
+        <input  HtmlTag="input" type="number" id="Debit" class="form-control" @bind-value="@expense.Debit"  />
+    </div>
+        <div class="form-group">
+        <label for="Credit">Credit Amount</label>
+        <input  HtmlTag="input" type="number" id="Credit" class="form-control" @bind-value="@expense.Credit"  />
+    </div>
+        <div class="form-group">
+        <label for="Narration">Description</label>
+        <input  HtmlTag="input" type="text" id="Narration" class="form-control" @bind-value="@expense.Narration"  />
+    </div>
+    </EditForm>
+  </div>
+  <br />
+  <br />
+  <div class="row row-cols-auto">
+      <div class="col">
+       <button class="btn btn-info" @onclick="@(async () => await Create(expense))"> Save </button>
+       </div>
+       <div class="col">
+          <button class="btn btn-secondary" @onclick="@(() => Clear())"> Clear </button>
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(() => Delete())"> Delete </button>
+           </div>
+  </div>
+   <br />
+  <br />
+   <div class="row row-cols-auto">
+        <div class="col">
+        <label for="name">From :</label>
+       </div>
+      <div class="col">
+        <input  HtmlTag="input" type="date" id="Name" class="form-control" @bind-value="@FromDate"  />
+       </div>
+         <div class="col">
+        <label for="name">To :</label>
+       </div>
+       <div class="col">
+        <input  HtmlTag="input" type="date" id="Name" class="form-control" @bind-value="@ToDate"  />
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(async () =>  Search())"> Search </button>
+           </div>
+  </div>
+ <br />
+  <br />
+   <div class="row">
+        <table class="table table-bordered table-striped">
+             <thead>
+      <tr>
+        <td>Name</td>
+          <td>Mode</td>
+        <td>Date</td>
+        <td>Debit</td>
+        <td>Credit</td>
+        <td>Description</td>
+      </tr>
+    </thead>
+     <tbody>
+        @if (_expenses.Any())
+        {
+            @foreach (var exp in _expenses)
+            {
+                <tr @onclick="(() => SetForUpdate(exp))">
+                    <td>@exp.Name</td>
+                     <td>@exp.Mode</td>
+                    <td>@exp.Date.ToShortDateString()</td>
+                     <td>@exp.Debit</td>
+                    <td>@exp.Credit</td>
+                   <td>@exp.Narration</td>
+                </tr>
+            }
+
+        }
+        else
+        {
+             <tr><td colspan="6"><strong>No products available</strong></td></tr>
+        }
+        </tbody>
+    </table>
+   </div>
+   <Confirm ConfirmationChanged="ConfirmDelete_Click" @ref="Deleteconfirmation" Dialog=@dialog ButtonText=@ButtonText></Confirm>
+
+ 

@@ -1,0 +1,34 @@
+﻿@page "/"
+@page "/login"
+@layout Login_Layout
+@inject NavigationManager navManager
+<section class="banner-container">
+        <div class="container">
+            <div class="left-section">
+                <h1>Ashpro</h1>
+                <p>
+                    Ashpro is an Indian based information technology Company which provides IT services to clients globally since 2013. We provide end-to-end business solutions that leverage technology.
+                    Our approach focuses on new ways of business combining IT innovation and adoption while also leveraging an organization’s current IT assets. The highly experienced team of engineers, an advanced research and development facility, help provide the best services and make Ashpro an ideal partner in product development.
+                    Our focus is on cutting-edge technologies in the software industry.
+                    Ashpro provides its clients with experience, leadership, as well as cost-effective and up-to-date resources creating high-quality and high-value products required for their future vision.
+                </p>
+                <button>Know More</button>
+            </div>
+            <div class="right-section">
+                <h3>Login</h3>
+                <EditForm Model=@user OnValidSubmit="Login_Click">
+                    <div class="input-group">
+                     <label for="Name">Username</label>
+                     <InputText   type = "text" name="Name" id="Name" class = "inputstyle"  @bind-Value="user.Name" placeholder = "Please enter User Name" autocomplete = "off" />
+                    </div>
+                    <div class="input-group">
+                    <label for="Password">Password</label>
+                    <InputText type="password" name = "password" class = "inputstyle" placeholder = "Please enter Pasword" @bind-Value="user.Password"/>
+                    </div>
+                    <div class="submit-section">
+                         <input type="submit" class="login-button" value="Login"/>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </section>

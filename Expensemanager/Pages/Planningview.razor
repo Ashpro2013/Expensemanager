@@ -1,0 +1,100 @@
+﻿@page "/planning"
+
+@using Expensemanager.Data
+<h3>Plan A Day</h3>
+
+ <div class="row">
+     <EditForm Model="@planning"> 
+        <div class="form-group">
+        <label for="name">Name</label>
+        <input  HtmlTag="input" type="text" id="Name" class="form-control" @bind-value="@planning.Name"  />
+    </div>
+     <div class="form-group">
+        <label for="name">Date</label>
+        <input  HtmlTag="input" type="date" id="Date" class="form-control" @bind-value="@planning.Date"  />
+    </div>
+        <div class="form-group">
+        <label for="Debit">Marks</label>
+        <input  HtmlTag="input" type="number" id="Debit" class="form-control" @bind-value="@planning.Marks"  />
+    </div>
+        <div class="form-group">
+        <label for="Credit">Expected marks</label>
+        <input  HtmlTag="input" type="number" id="Credit" class="form-control" @bind-value="@planning.Expected"  />
+    </div>
+        @if (iMasterId != null)
+        {
+            <div class="form-group">
+                <label for="Credit">Achieved Marks</label>
+                <input  HtmlTag="input" type="number" id="Credit" class="form-control" @bind-value="@planning.Achieved"  />
+            </div>
+            <div class="form-group">
+                <label for="Narration">Remarks</label>
+                <input  HtmlTag="input" type="text" id="Narration" class="form-control" @bind-value="@planning.Remarks"  />
+            </div>
+        }
+    </EditForm>
+ </div>
+  <br />
+  <br />
+  <div class="row row-cols-auto">
+      <div class="col">
+       <button class="btn btn-info" @onclick="@(async () => await Create(planning))"> Save </button>
+       </div>
+       <div class="col">
+          <button class="btn btn-secondary" @onclick="@(() => Clear())"> Clear </button>
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(() => Delete())"> Delete </button>
+           </div>
+  </div>
+   <br />
+  <br />
+   <div class="row row-cols-auto">
+         <div class="col">
+        <label for="name">Date :</label>
+       </div>
+       <div class="col">
+        <input  HtmlTag="input" type="date" id="Name" class="form-control" @bind-value="@dtmDate"  />
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(async () =>  Search())"> Search </button>
+           </div>
+  </div>
+ <br />
+  <br />
+   <div class="row">
+        <table class="table table-bordered table-striped">
+             <thead>
+      <tr>
+        <td>Name</td>
+        <td>Date</td>
+        <td>Marks</td>
+        <td>Expected</td>
+        <td>Achieved</td>
+          <td>Remarks</td>
+      </tr>
+    </thead>
+     <tbody>
+        @if (_plannings.Any())
+        {
+            @foreach (var x in _plannings)
+            {
+                <tr @onclick="(() => SetForUpdate(x))">
+                    <td>@x.Name</td>
+                    <td>@x.Date.ToShortDateString()</td>
+                     <td>@x.Marks</td>
+                    <td>@x.Expected</td>
+                   <td>@x.Achieved</td>
+                    <td>@x.Remarks</td>
+                </tr>
+            }
+
+        }
+        else
+        {
+             <tr><td colspan="6"><strong>No products available</strong></td></tr>
+        }
+        </tbody>
+    </table>
+   </div>
+   <Confirm ConfirmationChanged="ConfirmDelete_Click" @ref="Deleteconfirmation" Dialog=@dialog ButtonText=@ButtonText></Confirm>

@@ -1,0 +1,84 @@
+﻿@page "/diary"
+@using WYSIWYGTextEditor
+<h2><u>Diary</u></h2>
+<div class="row">
+      <EditForm Model="@diary"> 
+            <div class="form-group">
+        <label for="name">Name</label>
+        <input  HtmlTag="input" type="text" id="Name" class="form-control" @bind-value="@diary.Name"  />
+    </div>
+     <div class="form-group">
+        <label for="name">Date</label>
+        <input  HtmlTag="input" type="date" id="Date" class="form-control" @bind-value="@diary.DateOfDiary"  />
+    </div>
+<TextEditor Toolbar="new Toolbar { ShowFullToolbar=true }" EditorContainerId="TestId" @ref="@MyEditor"
+                    Placeholder="Enter non HTML format like centering...">
+</TextEditor>
+</EditForm>
+</div>
+  <br />
+  <br />
+   <br />
+  <br />
+   <br />
+  <br />
+   <br />
+  <br />
+  <div class="row row-cols-auto">
+      <div class="col">
+       <button class="btn btn-info" @onclick="@(async () => await Create(diary))"> Save </button>
+       </div>
+       <div class="col">
+          <button class="btn btn-secondary" @onclick="@(() => Clear())"> Clear </button>
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(() => Delete())"> Delete </button>
+           </div>
+  </div>
+  <br />
+   <div class="row row-cols-auto">
+        <div class="col">
+        <label for="name">From :</label>
+       </div>
+      <div class="col">
+        <input  HtmlTag="input" type="date" id="Name" class="form-control" @bind-value="@FromDate"  />
+       </div>
+         <div class="col">
+        <label for="name">To :</label>
+       </div>
+       <div class="col">
+        <input  HtmlTag="input" type="date" id="Name" class="form-control" @bind-value="@ToDate"  />
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(async () =>  Search())"> Search </button>
+           </div>
+  </div>
+  <br />
+   <div class="row">
+        <table class="table table-bordered table-striped">
+             <thead>
+      <tr>
+        <td>Name</td>
+        <td>Date</td>
+      </tr>
+    </thead>
+     <tbody>
+        @if (_diaries.Any())
+        {
+            @foreach (var x in _diaries)
+            {
+                <tr @onclick="(() => SetForUpdate(x))">
+                    <td>@x.Name</td>
+                    <td>@x.DateOfDiary.ToShortDateString()</td>
+                </tr>
+            }
+
+        }
+        else
+        {
+             <tr><td colspan="6"><strong>No products available</strong></td></tr>
+        }
+        </tbody>
+    </table>
+   </div>
+   <Confirm ConfirmationChanged="ConfirmDelete_Click" @ref="Deleteconfirmation" Dialog=@dialog ButtonText=@ButtonText></Confirm>

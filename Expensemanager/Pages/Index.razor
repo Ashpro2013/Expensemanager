@@ -1,0 +1,20 @@
+﻿@page "/index"
+@inject NavigationManager navManager
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<div class="row">
+        <div class ="col">
+            <Dasboardcard ImageUrl="icons8-cash-64.png" Title="Cash"  Value =@sCash Color="lightgreen"/>
+        </div>
+        <div class ="col">
+            <Dasboardcard ImageUrl="icons8-bank-64.png" Title="Bank"  Value =@sBank Color="lightblue"/>
+        </div>
+        <div class ="col">
+            <Dasboardcard ImageUrl="icons8-customer-60.png" Title="Expense"  Value =@sExpense Color="aqua"/>
+        </div>
+        <div class ="col">
+            <Dasboardcard ImageUrl="icons8-supplier-64.png" Title="Income"  Value =@sIncome Color="orange"/>
+        </div>
+    </div>
