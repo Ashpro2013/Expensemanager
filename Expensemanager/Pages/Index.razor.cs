@@ -35,7 +35,7 @@ namespace Expensemanager.Pages
         void DashboardLoadMethod()
         {
             List<Data.Transaction> transactions = new ();
-            transactions = db.Transactions.ToList();
+            transactions = db.Transactions.Where(x=> x.UserId == AppData.UserId).ToList();
             sExpense = transactions.Sum(x => x.Debit).ToString("N2");
             sIncome = transactions.Sum(x => x.Credit).ToString("N2");
             sBank = transactions.Where(x => x.Mode == "Bank").Sum(x => x.Credit-x.Debit).ToString("N2");

@@ -1,0 +1,63 @@
+﻿@page "/userdetails"
+
+@using Expensemanager.Data
+<h3>User Management</h3>
+
+ <div class="row">
+     <EditForm Model="@user"> 
+     <div class="form-group">
+        <label for="name">User Name :</label>
+        <input  HtmlTag="input" type="text" id="UserName" class="form-control" @bind-value="user.Name"  />
+    </div>
+    <div class="form-group">
+        <label for="password">Password :</label>
+        <input  HtmlTag="input" type="text" id="Password" class="form-control" @bind-value="user.Password"  />
+    </div>
+    </EditForm>
+ </div>
+
+ <br />
+  <br />
+  <div class="row row-cols-auto">
+      <div class="col">
+       <button class="btn btn-info" @onclick="@(async () => await Create(user))"> Save </button>
+       </div>
+       <div class="col">
+          <button class="btn btn-secondary" @onclick="@(() => Clear())"> Clear </button>
+          </div>
+       <div class="col">
+           <button class="btn btn-danger" @onclick="@(() => Delete())"> Delete </button>
+           </div>
+  </div>
+
+  
+ <br />
+  <br />
+   <div class="row">
+        <table class="table table-bordered table-striped">
+             <thead>
+      <tr>
+        <td>Name</td>
+        <td>Password</td>
+      </tr>
+    </thead>
+     <tbody>
+        @if (_userDetails.Any())
+        {
+            @foreach (var x in _userDetails)
+            {
+                <tr @onclick="(() => SetForUpdate(x))">
+                    <td>@x.Name</td>
+                    <td>@x.Password</td>
+                </tr>
+            }
+
+        }
+        else
+        {
+             <tr><td colspan="6"><strong>No products available</strong></td></tr>
+        }
+        </tbody>
+    </table>
+   </div>
+   <Confirm ConfirmationChanged="ConfirmDelete_Click" @ref="Deleteconfirmation" Dialog=@dialog ButtonText=@ButtonText></Confirm>

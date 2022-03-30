@@ -2,51 +2,44 @@
 using Expensemanager.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace Expensemanager.Pages
 {
-    public partial class Planningview
+    public partial class Userdetailsview
     {
         int? iMasterId = null;
-        private List<Planning> _plannings = new();
+        private List<UserDetails> _userDetails = new();
         ExpenseDBContext db;
-        private Planning planning { get; set; } = new();
-        public DateTime dtmDate { get; set; }
+        private UserDetails user { get; set; } = new();
         [Inject]
         private IDbContextFactory<ExpenseDBContext> _dbContextFactory { get; set; }
         protected Confirm Deleteconfirmation { get; set; }
         string dialog = "";
         string ButtonText = "";
+
         protected override async Task OnInitializedAsync()
         {
             db = await _dbContextFactory.CreateDbContextAsync();
-            planning = new Planning();
-            planning.Date = dtmDate = DateTime.Now;
+            user = new UserDetails();
             LoadData();
             await base.OnInitializedAsync();
         }
-        private void Search()
-        {
-            _plannings = new List<Planning>();
-            _plannings.AddRange(db.plannings.Where(x => x.UserId == AppData.UserId && x.Date >= dtmDate && x.Date<=dtmDate).ToList());
-            StateHasChanged();
-        }
         private void LoadData()
         {
-            _plannings.Clear();
-            _plannings.AddRange(db.plannings.Where(x=> x.UserId==AppData.UserId && x.Date>=DateTime.Now.Date && x.Date<=DateTime.Now));
+            _userDetails.Clear();
+            _userDetails.AddRange(db.userDetails.ToList());
             StateHasChanged();
         }
-        private async Task Create(Planning planning)
+        private async Task Create(UserDetails user)
         {
-            planning.UserId = AppData.UserId.ToInt32();
             if (iMasterId == null)
             {
-                await db.plannings.AddAsync(planning);
+                await db.userDetails.AddAsync(user);
             }
             else
             {
-                db.plannings.Update(planning);
+                db.userDetails.Update(user);
             }
             await db.SaveChangesAsync();
             LoadData();
@@ -54,16 +47,24 @@ namespace Expensemanager.Pages
         }
         private void Delete()
         {
-            dialog = "Are you sure you want delete?";
-            ButtonText = "Delete";
+            if (user.Name == "Admin")
+            {
+                dialog = "You can't delete Admin User!";
+                ButtonText = "Ok";
+            }
+            else
+            {
+                dialog = "Are you sure you want delete?";
+                ButtonText = "Delete";
+            }
             Deleteconfirmation.Show();
         }
         protected async Task ConfirmDelete_Click(bool DeleteConfirmed)
         {
             if (DeleteConfirmed)
             {
-                var car = await db.plannings.FindAsync(iMasterId);
-                db.plannings.Remove(car);
+                var car = await db.userDetails.FindAsync(iMasterId);
+                db.userDetails.Remove(car);
                 await db.SaveChangesAsync();
                 LoadData();
                 Clear();
@@ -71,15 +72,14 @@ namespace Expensemanager.Pages
         }
         private void Clear()
         {
-            planning = new Planning();
-            planning.Date = DateTime.Now;
+            user = new UserDetails();
             iMasterId = null;
             StateHasChanged();
         }
-        private void SetForUpdate(Planning pln)
+        private void SetForUpdate(UserDetails usr)
         {
-            planning = pln;
-            iMasterId = pln.Id;
+            user = usr;
+            iMasterId = usr.Id;
         }
     }
 }

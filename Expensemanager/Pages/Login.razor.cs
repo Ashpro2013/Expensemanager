@@ -5,6 +5,7 @@ namespace Expensemanager.Pages
 {
 public partial class Login
 {
+        string? alerMessage;
         ExpenseDBContext db;
         [Inject]
         private IDbContextFactory<ExpenseDBContext> _dbContextFactory { get; set; }
@@ -43,6 +44,11 @@ public partial class Login
                 AppData.UserName = user.Name;
                 AppData.UserId = user.Id;
                 navManager.NavigateTo("index", true);
+            }
+            else
+            {
+                user = new UserDetails();
+                alerMessage = "Incorrect Username/Password!";
             }
         }
     }

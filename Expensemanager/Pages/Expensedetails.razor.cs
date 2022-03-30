@@ -32,17 +32,18 @@ namespace Expensemanager.Pages
         private void Search()
         {
             _expenses = new List<Transaction>();
-            _expenses.AddRange(db.Transactions.Where(x=> x.Date>=FromDate && x.Date<=ToDate).ToList());
+            _expenses.AddRange(db.Transactions.Where(x=> x.UserId==AppData.UserId && x.Date>=FromDate && x.Date<=ToDate).ToList());
             StateHasChanged();
         }
         private void LoadData()
         {
             _expenses.Clear();
-            _expenses.AddRange(db.Transactions.OrderByDescending(x=> x.Date));
+            _expenses.AddRange(db.Transactions.Where(x=> x.UserId==AppData.UserId).OrderByDescending(x=> x.Date));
             StateHasChanged();
         }
         private async Task Create(Transaction expense)
         {
+            expense.UserId = AppData.UserId.ToInt32();
             if (iMasterId == null)
             {
                 await db.Transactions.AddAsync(expense);

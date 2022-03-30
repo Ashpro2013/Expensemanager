@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public DateTime DateOfDiary { get; set; }
         public string Diarynote { get; set; }
+        public int UserId { get; set; }
     }
 }

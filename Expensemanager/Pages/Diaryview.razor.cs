@@ -3,7 +3,6 @@ using Expensemanager.Data;
 using Expensemanager.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-
 namespace Expensemanager.Pages
 {
     public partial class Diaryview
@@ -32,18 +31,19 @@ namespace Expensemanager.Pages
         private void Search()
         {
             _diaries = new List<Diary>();
-            _diaries.AddRange(db.diaries.Where(x => x.DateOfDiary >= FromDate && x.DateOfDiary <= ToDate).ToList());
+            _diaries.AddRange(db.diaries.Where(x => x.UserId==AppData.UserId && x.DateOfDiary >= FromDate && x.DateOfDiary <= ToDate).ToList());
             StateHasChanged();
         }
         private void LoadData()
         {
             _diaries.Clear();
-            _diaries.AddRange(db.diaries.OrderByDescending(x => x.DateOfDiary));
+            _diaries.AddRange(db.diaries.Where(x=> x.UserId==AppData.UserId).OrderByDescending(x => x.DateOfDiary));
             StateHasChanged();
         }
         private async Task Create(Diary diary)
         {
             diary.Diarynote = await MyEditor.GetHTML();
+            diary.UserId = AppData.UserId.ToInt32();
             if (iMasterId == null)
             {
                 await db.diaries.AddAsync(diary);

@@ -9,5 +9,6 @@
         public decimal Credit { get; set; }
         public DateTime Date { get; set; }
         public string? Narration { get; set; }
+        public int UserId { get; set; }
     }
 }
