@@ -13,7 +13,6 @@ builder.Services.AddDbContextFactory<ExpenseDBContext>(options =>
      options
        .UseSqlite($"Filename={Connection.SqliteDbFilename}")
        .EnableSensitiveDataLogging());
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

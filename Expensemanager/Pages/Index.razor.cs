@@ -16,6 +16,8 @@ namespace Expensemanager.Pages
         string sBank = "0.00";
         string sExpense;
         string sIncome;
+        List<Data.Transaction> entIncome;
+        List<Data.Transaction> entExpense;
         protected override async Task OnInitializedAsync()
         {
             try
@@ -40,6 +42,8 @@ namespace Expensemanager.Pages
             sIncome = transactions.Sum(x => x.Credit).ToString("N2");
             sBank = transactions.Where(x => x.Mode == "Bank").Sum(x => x.Credit-x.Debit).ToString("N2");
             sCash = transactions.Where(x => x.Mode == "Cash").Sum(x => x.Credit - x.Debit).ToString("N2");
+            entExpense = transactions.Where(x=> x.Credit == 0).ToList();
+            entIncome = transactions.Where(x=> x.Debit==0).ToList();
         }
     }
 }

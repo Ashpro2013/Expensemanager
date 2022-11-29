@@ -1,5 +1,6 @@
 ﻿@page "/diary"
 @using WYSIWYGTextEditor
+@inject IJSRuntime JSRuntime
 <h2><u>Diary</u></h2>
 <div class="row">
       <EditForm Model="@diary"> 
@@ -33,6 +34,9 @@
           </div>
        <div class="col">
            <button class="btn btn-danger" @onclick="@(() => Delete())"> Delete </button>
+           </div>
+            <div class="col">
+           <button class="btn btn-danger" @onclick="@(() => CopyToClipBoard(diary))"> Copy </button>
            </div>
   </div>
   <br />
