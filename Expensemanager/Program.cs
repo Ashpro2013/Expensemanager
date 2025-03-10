@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<AppData>();
+builder.Services.AddScoped<AppData>();
 builder.Services.AddDbContextFactory<ExpenseDBContext>(options =>
      options
        .UseSqlite($"Filename={Connection.SqliteDbFilename}")

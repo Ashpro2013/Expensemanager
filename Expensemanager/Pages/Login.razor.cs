@@ -1,6 +1,9 @@
 ﻿using Expensemanager.Data;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
+
 namespace Expensemanager.Pages
 {
 public partial class Login
@@ -9,6 +12,9 @@ public partial class Login
         ExpenseDBContext db;
         [Inject]
         private IDbContextFactory<ExpenseDBContext> _dbContextFactory { get; set; }
+        [Inject]
+        private ProtectedSessionStorage storage { get; set; }
+
         public UserDetails user { get; set; } = new();
         protected override async Task OnInitializedAsync()
         {
@@ -43,6 +49,7 @@ public partial class Login
                 AppData.isLogin = true;
                 AppData.UserName = user.Name;
                 AppData.UserId = user.Id;
+                await storage.SetAsync("UserId", user.Id);
                 navManager.NavigateTo("index", true);
             }
             else
